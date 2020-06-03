@@ -21,7 +21,7 @@ steps:
       - scripts/checkIfRunDrone.sh $GIT_USERNAME $GIT_TOKEN $DRONE_PULL_REQUEST || exit 0
       - emulator-headless -avd android-27 -no-snapshot -gpu swiftshader_indirect -no-window -no-audio -skin 500x833 &
       - sed -i s'#<bool name="is_beta">false</bool>#<bool name="is_beta">true</bool>#'g src/main/res/values/setup.xml
-      - sed -i s"#server#server-stable#" gradle.properties
+      - sed -i s"#server#server#" gradle.properties
       - ./gradlew assembleGplay
       - ./gradlew assembleGplayDebug
       - scripts/wait_for_emulator.sh
@@ -53,7 +53,7 @@ steps:
         - master
 
 services:
-  - name: server-stable
+  - name: server
     image: nextcloudci/server:server-17 # also change in updateScreenshots.sh
     commands:
       - BRANCH='stable18' /usr/local/bin/initnc.sh
@@ -101,7 +101,6 @@ steps:
       - scripts/checkIfRunDrone.sh $GIT_USERNAME $GIT_TOKEN $DRONE_PULL_REQUEST || exit 0
       - emulator-headless -avd android-27 -no-snapshot -gpu swiftshader_indirect -no-window -no-audio -skin 500x833 &
       - sed -i s'#<bool name="is_beta">false</bool>#<bool name="is_beta">true</bool>#'g src/main/res/values/setup.xml
-      - sed -i s"#server#screenshot-stable#" gradle.properties
       - ./gradlew assembleGplayDebug
       - scripts/wait_for_emulator.sh
       - ./gradlew installGplayDebugAndroidTest
@@ -130,7 +129,7 @@ steps:
         - master
 
 services:
-  - name: screenshot-stable
+  - name: server
     image: nextcloudci/server:server-17 # also change in updateScreenshots.sh
     commands:
       - BRANCH='stable18' /usr/local/bin/initnc.sh
@@ -177,7 +176,6 @@ steps:
       - scripts/checkIfRunDrone.sh $GIT_USERNAME $GIT_TOKEN $DRONE_PULL_REQUEST || exit 0
       - emulator-headless -avd android-27 -no-snapshot -gpu swiftshader_indirect -no-window -no-audio -skin 500x833 &
       - sed -i s'#<bool name="is_beta">false</bool>#<bool name="is_beta">true</bool>#'g src/main/res/values/setup.xml
-      - sed -i s"#server#server-master#" gradle.properties
       - ./gradlew assembleGplay
       - ./gradlew assembleGplayDebug
       - scripts/wait_for_emulator.sh
@@ -211,7 +209,7 @@ steps:
         - master
 
 services:
-  - name: server-master
+  - name: server
     image: nextcloudci/server:server-17 # also change in updateScreenshots.sh
     commands:
       - /usr/local/bin/initnc.sh
@@ -260,7 +258,6 @@ steps:
       - scripts/checkIfRunDrone.sh $GIT_USERNAME $GIT_TOKEN $DRONE_PULL_REQUEST || exit 0
       - emulator-headless -avd android-27 -no-snapshot -gpu swiftshader_indirect -no-window -no-audio -skin 500x833 &
       - sed -i s'#<bool name="is_beta">false</bool>#<bool name="is_beta">true</bool>#'g src/main/res/values/setup.xml
-      - sed -i s"#server#screenshot-master#" gradle.properties
       - ./gradlew assembleGplayDebug
       - scripts/wait_for_emulator.sh
       - ./gradlew installGplayDebugAndroidTest
@@ -289,11 +286,10 @@ steps:
         - master
 
 services:
-  - name: screenshot-master
+  - name: server
     image: nextcloudci/server:server-17 # also change in updateScreenshots.sh
     commands:
       - /usr/local/bin/initnc.sh
-      - su www-data -c "php /var/www/html/occ status"
       - su www-data -c "OC_PASS=user1 php /var/www/html/occ user:add --password-from-env --display-name='User One' user1"
       - su www-data -c "OC_PASS=user2 php /var/www/html/occ user:add --password-from-env --display-name='User Two' user2"
       - su www-data -c "OC_PASS=user3 php /var/www/html/occ user:add --password-from-env --display-name='User Three' user3"
