@@ -71,7 +71,7 @@ sleep 2
 adb shell "echo $IP server >> /system/etc/hosts"
 
 ## update/create all screenshots
-./gradlew gplayDebugExecuteScreenshotTests -Precord \
+./gradlew gplayDebugExecuteScreenshotTests \
 -Pandroid.testInstrumentationRunnerArguments.annotation=com.owncloud.android.utils.ScreenshotTest
 
 ## update screenshots in a class
